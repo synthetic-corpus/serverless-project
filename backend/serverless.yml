@@ -10,7 +10,7 @@ provider:
   runtime: nodejs8.10
 
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
+  region: ${opt:region, 'us-west-2'}
 
 functions:
 
@@ -68,6 +68,6 @@ resources:
 
     # An S3 Bucket
 
-    # A mongo Database probably
+    # A Dynamo Database probably
 
     # Autho Secret probly
