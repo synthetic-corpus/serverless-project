@@ -9,5 +9,5 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   // TODO: Implement creating a new TODO item
   console.log(newTodo)
-  return undefined
+  return {statusCode: 200, body: "this is only a test"}
 }
