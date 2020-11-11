@@ -18,6 +18,7 @@ functions:
     handler: src/lambda/auth/auth0Authorizer.handler
 
   # TODO: Configure this function
+  # Needs IAM permissions to access Buckets/Databases
   GetTodos:
     handler: src/lambda/http/getTodos.handler
     events:
@@ -26,7 +27,7 @@ functions:
           path: todos
 
   # TODO: Configure this function
-  GetTodos:
+  # Needs IAM permissions to access Buckets/databases
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -35,6 +36,7 @@ functions:
           path: todos
 
   # TODO: Configure this function
+  # Needs IAM permissions to access Buckets/databases
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
     events:
@@ -43,6 +45,7 @@ functions:
           path: todos/{todoId}
 
   # TODO: Configure this function
+  # Needs IAM permissions to access Buckets/databases
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
@@ -51,6 +54,7 @@ functions:
           path: todos/{todoId}
 
   # TODO: Configure this function
+  # Needs IAM permissions to access Buckets/Databases
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -61,3 +65,9 @@ functions:
 resources:
   Resources:
     # TODO: Add any necessary AWS resources
+
+    # An S3 Bucket
+
+    # A mongo Database probably
+
+    # Autho Secret probly
