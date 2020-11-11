@@ -1,5 +1,5 @@
 service:
-  name: serverless-todo-app
+  name: sans-server-todo-app-jtg72006
 
 plugins:
   - serverless-webpack
