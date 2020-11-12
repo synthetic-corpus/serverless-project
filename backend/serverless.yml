@@ -12,6 +12,31 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-west-2'}
 
+  environment:
+    PHOTO_BUCKET: sans-server-todo-jtg72006-${self:provider.stage}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - codedeploy:*
+      Resource:
+        - '*'
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: arn:aws:s3:::${self:provider.environment.PHOTO_BUCKET}/*
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v0.1.0
+        title: JTG Todo
+        description: Serverless application for things todo.
+
+
+
 functions:
 
   Auth:
@@ -25,6 +50,7 @@ functions:
       - http:
           method: get
           path: todos
+          cors: true
 
   # TODO: Configure this function
   # Needs IAM permissions to access Buckets/databases
@@ -34,6 +60,7 @@ functions:
       - http:
           method: post
           path: todos
+          cors: true
 
   # TODO: Configure this function
   # Needs IAM permissions to access Buckets/databases
@@ -43,6 +70,7 @@ functions:
       - http:
           method: patch
           path: todos/{todoId}
+          cors: true
 
   # TODO: Configure this function
   # Needs IAM permissions to access Buckets/databases
@@ -52,6 +80,7 @@ functions:
       - http:
           method: delete
           path: todos/{todoId}
+          cors: true
 
   # TODO: Configure this function
   # Needs IAM permissions to access Buckets/Databases
@@ -61,6 +90,7 @@ functions:
       - http:
           method: post
           path: todos/{todoId}/attachment
+          cors: true
 
 resources:
   Resources:
@@ -76,7 +106,39 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
     # An S3 Bucket
+    PhotoBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.PHOTO_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: Phtobucket-Policy-1
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: 'arn:aws:s3:::${self:provider.environment.PHOTO_BUCKET}/*'
+        Bucket: !Ref PhotoBucket
 
     # A Dynamo Database probably
+    
 
     # Autho Secret probly
