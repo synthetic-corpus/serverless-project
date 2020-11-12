@@ -14,6 +14,8 @@ provider:
 
   environment:
     PHOTO_BUCKET: sans-server-todo-jtg72006-${self:provider.stage}
+    TODOS_TABLE: Todos-${self:provider.stage}
+    INDEX_NAME: TodoIDindex
 
   iamRoleStatements:
     - Effect: Allow
@@ -139,6 +141,32 @@ resources:
         Bucket: !Ref PhotoBucket
 
     # A Dynamo Database probably
+    TodosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+          AttributeDefinitions:
+            - AttributeName: partitionKey
+              AttributeType: S
+            - AttributeName: sortKey
+              AttributeType: S
+            - AttributeName: indexKey
+              AttributeType: S
+          KeySchema:
+            - AttributeName: partitionKey
+              KeyType: HASH
+            - AttributeName: sortKey
+              KeyType: RANGE
+          BillingMode: PAY_PER_REQUEST
+          TableName: ${self:provider.environment.TODOS_TABLE}
+          LocalSecondaryIndexes:
+            - IndexName: ${self:provider.environment.INDEX_NAME}
+              KeySchema:
+                - AttributeName: partitionKey
+                  KeyType: HASH
+                - AttributeName: indexKey
+                  KeyType: RANGE
+              Projection:
+                ProjectionType: ALL
     
 
     # Autho Secret probly
