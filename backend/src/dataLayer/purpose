@@ -1,0 +1,6 @@
+The Data layer sits between the Business Layer and the Database.
+
+Connects to the DB client.
+
+Gets called by the Businesslayer, which sends an Object.
+Calls database related functions. Returns to Businesses layer the results of those call.
