@@ -18,6 +18,13 @@ import * as uuid from 'uuid'
 
 const databaseAccess = new DatabaseAccess()
 
+/* Get Todos */
+export async function getTodo(
+    userID: string
+): Promise<string[]> {
+    return databaseAccess.getTodo(userID)
+}
+
 /* Add Todo */
 export async function createTodo(
     createTodoRequest: CreateTodoRequest,
@@ -39,7 +46,6 @@ export async function createTodo(
 }
 
 /* Update Todo */
-
 export async function updateTodo(
     updateTodoRequest: UpdateTodoRequest,
     todoId: string
@@ -48,4 +54,9 @@ export async function updateTodo(
 
 }
 
-/* Get Todos that belong to user */
+/* Delete Todo */
+export async function deleteTodo(
+    todoId: string
+): Promise<string>{
+    return databaseAccess.deleteTodo(todoId)
+}

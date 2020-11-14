@@ -6,11 +6,13 @@ import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 import { createTodo } from '../../businessLogic/todoLogic'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  console.log(event)
   const newTodo: CreateTodoRequest = JSON.parse(event.body)
+  
   /* Implment Authorization here when ready */
   const jwtToken = 'nonsense'
 
-  const newTodo = await createTodo(newTodo, jwtToken)
+  const newItem = await createTodo(newTodo, jwtToken)
 
   // TODO: Implement creating a new TODO item
   console.log(newTodo)
@@ -21,7 +23,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      newTodo
+      newItem
     })
   }
 }
