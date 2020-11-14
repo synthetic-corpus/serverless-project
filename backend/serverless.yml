@@ -6,6 +6,7 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-aws-documentation
   - serverless-offline
+  - serverless-DynamoDB-local
 
 provider:
   name: aws
