@@ -1,0 +1,5 @@
+Is inbetween the HTTP requests and the data layer.
+
+Is called by HTTP. Will Return the result of a Call to the Data Layer.
+
+Calls the Data Layer.
