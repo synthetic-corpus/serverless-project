@@ -5,6 +5,8 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-aws-documentation
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -30,6 +32,8 @@ provider:
       Resource: arn:aws:s3:::${self:provider.environment.PHOTO_BUCKET}/*
 
 custom:
+  serverless-offline:
+    port: 3003
   documentation:
     api:
       info:
