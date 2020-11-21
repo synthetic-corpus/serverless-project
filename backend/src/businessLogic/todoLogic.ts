@@ -15,6 +15,8 @@ import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { DatabaseAccess } from '../dataLayer/databaseAccess'
 import { S3Access } from '../dataLayer/s3Access'
 
+
+
 import * as uuid from 'uuid'
 
 const databaseAccess = new DatabaseAccess()
@@ -23,21 +25,20 @@ const s3Access = new S3Access
 /* Get Todos */
 export async function getTodo(
     userID: string
-): Promise<string[]> {
+): Promise<TodoItem[]> {
     return databaseAccess.getTodo(userID)
 }
 
 /* Add Todo */
 export async function createTodo(
     createTodoRequest: CreateTodoRequest,
-    jwtToken: string
+    userId: string
 ): Promise<TodoItem> {
 
     const todoID = uuid.v4()
-    const userID = jwtToken
 
     return await databaseAccess.createTodo({
-        userId: userID,
+        userId: userId,
         todoId: todoID,
         createdAt: new Date().toISOString(),
         name:  createTodoRequest.name,
