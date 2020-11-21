@@ -6,7 +6,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   // TODO: Get all TODO items for a current user
   console.log(event)
   const userId = 'nonsense'
-  const getTodos = getTodo(userId)
+  const getTodos = await getTodo(userId)
   console.log(getTodos)
   return {
     statusCode: 203, 

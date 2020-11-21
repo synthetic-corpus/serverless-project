@@ -13,10 +13,12 @@ import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 
 /* Functions from the Data Layer. Which does nothing right now */
 import { DatabaseAccess } from '../dataLayer/databaseAccess'
+import { S3Access } from '../dataLayer/s3Access'
 
 import * as uuid from 'uuid'
 
 const databaseAccess = new DatabaseAccess()
+const s3Access = new S3Access
 
 /* Get Todos */
 export async function getTodo(
@@ -58,5 +60,13 @@ export async function updateTodo(
 export async function deleteTodo(
     todoId: string
 ): Promise<string>{
-    return databaseAccess.deleteTodo(todoId)
+    return await databaseAccess.deleteTodo(todoId)
+}
+
+/* Get a URL */
+
+export async function getUploadUrl(
+    todoId: string
+): Promise<string>{
+    return await s3Access.getUploadUrl(todoId)
 }
