@@ -33,8 +33,7 @@ export const handler = async (
     logger.info('User was authorized', jwtToken)
     
     return {
-      // principalId: jwtToken.sub,
-      principalId: '123',
+      principalId: jwtToken.sub,
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
