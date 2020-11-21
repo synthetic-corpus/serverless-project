@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const getTodos = await getTodo(userId)
   console.log(getTodos)
   return {
-    statusCode: 203, 
+    statusCode: 200, 
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
