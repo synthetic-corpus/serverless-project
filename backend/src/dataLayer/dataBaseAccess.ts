@@ -1,26 +1,40 @@
-/*import * as AWS  from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
+// import * as AWS  from 'aws-sdk'
+// import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-*/
+import { Response } from 'aws-sdk'
+
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
 
+const documentClient = new DocumentClient
 export class DatabaseAccess {
 
     /* Not access Database yet. No constructor needed. */
-    constructor() {}
-
-    getTodo(userId: string): string[] {
-        return [
-            'This',
-            'Empty',
-            'Array',
-            userId
-        ]
+    myTable: string
+    constructor() {
+        this.myTable = process.env.TODOS_TABLE
     }
 
-    createTodo(todoItem: TodoItem): TodoItem {
-        return todoItem
+    async getTodo(userId: string): Promise<TodoItem[]> {
+        const inputs = {
+            TableName: this.myTable,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+              ':userId': userId
+            }
+          }
+          const result = await documentClient.query(inputs).promise()
+          return result.Items as TodoItem[]
+    }
+
+    async createTodo(todoItem: TodoItem): Promise<{}> {
+        const inputs = {
+            TableName: this.myTable,
+            Item: todoItem
+        }
+        
+        const result = await documentClient.put(inputs).promise()
+        return result
     }
 
     updateTodo(todoUpdate: TodoUpdate, todoId: string): TodoUpdate {
