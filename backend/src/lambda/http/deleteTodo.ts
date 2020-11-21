@@ -6,7 +6,11 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const todoId = event.pathParameters.todoId
   const todoDeleted = await deleteTodo(todoId)
   return {
-    statusCode: 203, 
+    statusCode: 203,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    }, 
     body: JSON.stringify({
       todoDeleted
     })
