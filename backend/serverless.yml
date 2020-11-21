@@ -30,7 +30,7 @@ provider:
       Action:
         - s3:PutObject
         - s3:GetObject
-      Resource: arn:aws:s3:::${self:provider.environment.PHOTO_BUCKET}/*
+      Resource: arn:aws:s3:${self:provider.region}::${self:provider.environment.PHOTO_BUCKET}/*
 
 custom:
   serverless-offline:
@@ -49,8 +49,7 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  # TODO: Configure this function
-  # Needs IAM permissions to access Buckets/Databases
+
   GetTodos:
     handler: src/lambda/http/getTodos.handler
     events:
@@ -58,9 +57,13 @@ functions:
           method: get
           path: todos
           cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Scan
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
-  # TODO: Configure this function
-  # Needs IAM permissions to access Buckets/databases
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -68,9 +71,13 @@ functions:
           method: post
           path: todos
           cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
-  # TODO: Configure this function
-  # Needs IAM permissions to access Buckets/databases
+
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
     events:
@@ -78,9 +85,13 @@ functions:
           method: patch
           path: todos/{todoId}
           cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
-  # TODO: Configure this function
-  # Needs IAM permissions to access Buckets/databases
+
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
@@ -88,6 +99,11 @@ functions:
           method: delete
           path: todos/{todoId}
           cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
   # TODO: Configure this function
   # Needs IAM permissions to access Buckets/Databases
