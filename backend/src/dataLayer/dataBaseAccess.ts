@@ -1,11 +1,11 @@
 // import * as AWS  from 'aws-sdk'
 // import * as AWSXRay from 'aws-xray-sdk'
-import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+//import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
 
-const documentClient = new DocumentClient
+//const documentClient = new DocumentClient
 export class DatabaseAccess {
 
     /* Not access Database yet. No constructor needed. */
@@ -28,16 +28,32 @@ export class DatabaseAccess {
           const result = await documentClient.query(inputs).promise()
           return result.Items as TodoItem[]*/
           console.log(userId)
-          return []
+          return [{
+              userId: userId,
+              todoId: "1323",
+              createdAt: "a point in time",
+              name: "run more tests",
+              dueDate: "a point in time",
+              done: false
+          },
+          {
+            userId: userId,
+            todoId: "1326",
+            createdAt: "a point in time",
+            name: "run more tests",
+            dueDate: "a point in time",
+            done: false,
+            attachmentUrl: "this is link to s3 bucket!"
+          }]
     }
 
     async createTodo(todoItem: TodoItem): Promise<TodoItem> {
-        const inputs = {
+        /*const inputs = {
             TableName: this.myTable,
             Item: todoItem
         }
         
-        await documentClient.put(inputs).promise()
+        await documentClient.put(inputs).promise() */
         return todoItem
     }
 
