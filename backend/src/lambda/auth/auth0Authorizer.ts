@@ -6,21 +6,21 @@ import { createLogger } from '../../utils/logger'
 import Axios from 'axios'
 import { Jwt } from '../../auth/Jwt'
 import { JwtPayload } from '../../auth/JwtPayload'
-import { jwkskey } from '../../auth/jwkskey'
+//import { jwkskey } from '../../auth/jwkskey'
 
 const logger = createLogger('auth')
 
 // TODO: Provide a URL that can be used to download a certificate that can be used
 // to verify JWT token signature.
 // To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
-const jwksUrl: any = Axios.get(
+/*const jwksUrl: any = Axios.get(
   'https://dev-jtg.us.auth0.com/.well-known/jwks.json',{
     headers: {
       'Content-Type': 'application/json',
       "Access-Control-Allow-Origin": "*",
       'Access-Control-Allow-Credentials': true,
     }
-  })
+  }) */
 
 
 export const handler = async (
@@ -73,7 +73,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
   // Uncertain why the jwt item is here. Comment out for now.
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
-  const rawCert = matchToKey(jwt.header.kid, jwksUrl)
+  const rawCert = await matchToKey(jwt.header.kid)
   const cert = certToPEM(rawCert)
   
   // TODO: Implement token verification
@@ -94,14 +94,27 @@ function getToken(authHeader: string): string {
   return token
 }
 
-function matchToKey(kid: string, keys: jwkskey[]){
+async function matchToKey(kid: string) {
   // takes the header from the JWT token and matches to the right Key.
-  keys.forEach((key)=>{
-    if(kid === key.kid){
+  const actualKeys: any = await Axios.get('https://dev-jtg.us.auth0.com/.well-known/jwks.json')
+  // console.log(actualKeys.data.keys)
+  const array = actualKeys.data.keys
+  kid
+  return array[0].x5c[0] 
+  /*
+
+  Boolean check below currently fails. I cannot match the KID input with the keys.kid from the 
+  Axios call.
+  
+  array.forEach((key)=>{
+    console.log(`Comparing ${kid} with ${key.kid}`)
+    if(kid.toString() === key.kid.toString()){
       return key.x5c[0]
     }
-    return undefined // Will thrown an error that that's kind of the idea.
+    
   })
+  return undefined // Will thrown an error that that's kind of the idea.
+  */
 }
 
 function certToPEM(cert) {
