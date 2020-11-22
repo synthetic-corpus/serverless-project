@@ -5,10 +5,10 @@ import { getTodo } from '../../businessLogic/todoLogic'
 import { getUserId } from '../utils'
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // TODO: Get all TODO items for a current user
-  console.log(event)
+  
   const userId = getUserId(event)
   const getTodos = await getTodo(userId)
-  console.log(getTodos)
+  
   return {
     statusCode: 200, 
     headers: {
