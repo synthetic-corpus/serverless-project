@@ -7,7 +7,6 @@ plugins:
   - serverless-aws-documentation
   - serverless-offline
   - serverless-DynamoDB-local
-
 provider:
   name: aws
   runtime: nodejs12.x
@@ -20,17 +19,6 @@ provider:
     TODOS_TABLE: Todos-${self:provider.stage}
     INDEX_NAME: TodoIDindex
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - codedeploy:*
-      Resource:
-        - '*'
-    - Effect: Allow
-      Action:
-        - s3:PutObject
-        - s3:GetObject
-      Resource: arn:aws:s3:${self:provider.region}::${self:provider.environment.PHOTO_BUCKET}/*
 
 custom:
   serverless-offline:
