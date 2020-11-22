@@ -10,20 +10,25 @@ export class DatabaseAccess {
 
     /* Not access Database yet. No constructor needed. */
     myTable: string
+    indexName: string
     constructor() {
         this.myTable = process.env.TODOS_TABLE
+        this.indexName = process.env.INDEX_NAME
     }
 
     async getTodo(userId: string): Promise<TodoItem[]> {
-        const inputs = {
+        /*const inputs = {
             TableName: this.myTable,
+            IndexName: this.indexName,
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
               ':userId': userId
             }
           }
           const result = await documentClient.query(inputs).promise()
-          return result.Items as TodoItem[]
+          return result.Items as TodoItem[]*/
+          console.log(userId)
+          return []
     }
 
     async createTodo(todoItem: TodoItem): Promise<TodoItem> {
