@@ -8,6 +8,11 @@ plugins:
   - serverless-offline
   - serverless-DynamoDB-local
 provider:
+
+  tracing:
+    lambda: true
+    apiGateway: true
+    
   name: aws
   runtime: nodejs12.x
 
