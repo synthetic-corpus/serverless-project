@@ -18,7 +18,7 @@ provider:
   runtime: nodejs12.x
 
   stage: ${opt:stage, 'dev'}
-  # region: ${opt:region,'us-west-2'} This Broke. I don't know why.
+  region: ${opt:region,'us-west-2'}
 
   environment:
     PHOTO_BUCKET: sans-server-todo-jtg72006-${self:provider.stage}
@@ -41,7 +41,7 @@ provider:
       Action:
         - s3:PutObject
         - s3:GetObject
-      Resource: arn:aws:s3:${self:provider.region}::${self:provider.environment.PHOTO_BUCKET}/*
+      Resource: arn:aws:s3:::${self:provider.environment.PHOTO_BUCKET}/*
 
 custom:
   serverless-offline:
