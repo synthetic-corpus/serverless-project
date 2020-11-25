@@ -1,5 +1,6 @@
 service:
   name: sans-server-todo-app-jtg72006
+frameworkVersion: '2.12.0'
 
 plugins:
   - serverless-webpack
