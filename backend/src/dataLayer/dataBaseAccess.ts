@@ -27,9 +27,11 @@ export class DatabaseAccess {
               ':userId': userId
             }
           }
+          console.log("*** Data Layer***")
+          console.log(inputs)
           const result = await this.documentClient.query(inputs).promise()
           return result.Items as TodoItem[]
-          console.log(userId)
+          /*console.log(userId)
           return [{
               userId: userId,
               todoId: "1323",
@@ -46,7 +48,7 @@ export class DatabaseAccess {
             dueDate: "a point in time",
             done: false,
             attachmentUrl: "this is link to s3 bucket!"
-          }]
+          }]*/
     }
 
     async createTodo(todoItem: TodoItem): Promise<TodoItem> {

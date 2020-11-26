@@ -102,7 +102,7 @@ async function matchToKey(kid: string) {
   try{
     const actualKeys = await Axios.get('https://dev-jtg.us.auth0.com/.well-known/jwks.json')
     const signerKey = actualKeys.data.keys.filter(key => {key[kid] === kid})[0] || actualKeys.data.keys[0]
-    console.log(actualKeys.data.keys)
+    //console.log(actualKeys.data.keys)
     const x5cKey: string = signerKey.x5c[0]
     if(!x5cKey){
       throw new Error(`Unable to Match any Keys. x5cKey not extracted.`)
