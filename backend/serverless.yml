@@ -26,6 +26,7 @@ provider:
     PHOTO_BUCKET: sans-server-todo-jtg72006-${self:provider.stage}
     TODOS_TABLE: TodosDB-${self:provider.stage}
     INDEX_NAME: TodoIDindex
+    BUCKET_EXPIRATION: 600
 
   iamRoleStatements:
     - Effect: Allow
@@ -69,12 +70,13 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  TestAPI:
+  OnlineCheck:
     handler: src/lambda/http/onlineCheck.handler
     events:
       - http:
           method: get
           cors: true
+          path: test
 
   GetTodos:
     handler: src/lambda/http/getTodos.handler

@@ -1,7 +1,18 @@
-export class S3Access {
-    constructor(){}
 
-    getUploadUrl(todoId: string){
-        return(`Upload URL for ${todoId}`)
+import { SignedURLRequest } from '../models/SignedURLRequest'
+import * as AWS from 'aws-sdk'
+export class S3Access {
+    constructor(
+        private bucket = process.env.PHOTO_BUCKET,
+        private expiration = process.env.BUCKET_EXPIRATION,
+        private s3 = new AWS.S3({signatureVersion: 'v4'})
+    ){}
+    async getUploadUrl(todoId: string){
+        const request: SignedURLRequest = {
+            Bucket: this.bucket,
+            Key: todoId,
+            Expires: this.expiration
+        }
+        return this.s3.getSignedUrlPromise('putObject',request)
     }
 }
