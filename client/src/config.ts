@@ -1,6 +1,6 @@
 // TODO: Once your application is deployed, copy an API id here so that the frontend could interact with it
-const apiId = 'dwfdynjdjk'
-export const apiEndpoint = `https://cloudapi.joelgonzaga.com/dev`
+// const apiId = 'dwfdynjdjk'
+export const apiEndpoint = `http:localhost:3000/dev`
 
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID
