@@ -74,7 +74,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   // Uncertain why the jwt item is here. Comment out for now.
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
   const rawCert = await matchToKey(jwt.header.kid)
-  const cert = certToPEM(rawCert)
+  const cert = stringToPEM(rawCert)
   
   // TODO: Implement token verification
   // You should implement it similarly to how it was implemented for the exercise for the lesson 5
@@ -97,28 +97,23 @@ function getToken(authHeader: string): string {
 
 async function matchToKey(kid: string) {
   // takes the header from the JWT token and matches to the right Key.
-  const actualKeys: any = await Axios.get('https://dev-jtg.us.auth0.com/.well-known/jwks.json')
-  // console.log(actualKeys.data.keys)
-  const array = actualKeys.data.keys
-  kid
-  return array[0].x5c[0] 
-  /*
-
-  Boolean check below currently fails. I cannot match the KID input with the keys.kid from the 
-  Axios call.
-  
-  array.forEach((key)=>{
-    console.log(`Comparing ${kid} with ${key.kid}`)
-    if(kid.toString() === key.kid.toString()){
-      return key.x5c[0]
+  try{
+    const actualKeys: any = await Axios.get('https://dev-jtg.us.auth0.com/.well-known/jwks.json')
+    const signerKey: any = actualKeys.data.keys(key => {key.kid === kid})[0]
+    const x5cKey: string = signerKey.x5v[0]
+    if(!x5cKey){
+      throw new Error(`Unable to Match any Keys. x5cKey not extracted.`)
     }
-    
-  })
-  return undefined // Will thrown an error that that's kind of the idea.
-  */
+
+    return x5cKey
+  }catch(e){
+    console.log(`Could not authenticate. ${e}`)
+  }
+  
+  // console.log(actualKeys.data.keys)
 }
 
-function certToPEM(cert) {
+function stringToPEM(cert: string) {
   cert = cert.match(/.{1,64}/g).join('\n');
   cert = `-----BEGIN CERTIFICATE-----\n${cert}\n-----END CERTIFICATE-----\n`;
   return cert;
