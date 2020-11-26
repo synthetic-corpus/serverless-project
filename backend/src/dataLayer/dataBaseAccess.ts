@@ -31,33 +31,16 @@ export class DatabaseAccess {
           console.log(inputs)
           const result = await this.documentClient.query(inputs).promise()
           return result.Items as TodoItem[]
-          /*console.log(userId)
-          return [{
-              userId: userId,
-              todoId: "1323",
-              createdAt: "a point in time",
-              name: "run more tests",
-              dueDate: "a point in time",
-              done: false
-          },
-          {
-            userId: userId,
-            todoId: "1326",
-            createdAt: "a point in time",
-            name: "run more tests",
-            dueDate: "a point in time",
-            done: false,
-            attachmentUrl: "this is link to s3 bucket!"
-          }]*/
+          
     }
 
     async createTodo(todoItem: TodoItem): Promise<TodoItem> {
-        /*const inputs = {
+        const inputs = {
             TableName: this.myTable,
             Item: todoItem
         }
         
-        await documentClient.put(inputs).promise() */
+        await this.documentClient.put(inputs).promise()
         return todoItem
     }
 
@@ -67,7 +50,16 @@ export class DatabaseAccess {
         }
     }
 
-    deleteTodo(todoId: string){
-        return(`Imagine Deleting ${todoId}`)
+    async deleteTodo(userId: string, todoId: string){
+
+        const inputs = {
+            TableName: this.myTable,
+            Key: {
+                userId: userId,
+                todoId: todoId
+            }
+        }
+        await this.documentClient.delete(inputs).promise()
+        return `Deleted Todo ${todoId}`
     }
 }

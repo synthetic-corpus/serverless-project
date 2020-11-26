@@ -59,9 +59,10 @@ export async function updateTodo(
 
 /* Delete Todo */
 export async function deleteTodo(
+    userId: string,
     todoId: string
 ): Promise<string>{
-    return await databaseAccess.deleteTodo(todoId)
+    return await databaseAccess.deleteTodo(userId,todoId)
 }
 
 /* Get a URL */
