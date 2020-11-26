@@ -35,16 +35,18 @@ export async function createTodo(
     userId: string
 ): Promise<TodoItem> {
 
-    const todoID = uuid.v4()
-
-    return await databaseAccess.createTodo({
-        userId: userId,
-        todoId: todoID,
+    const todoId = uuid.v4()
+    const bucket = process.env.PHOTO_BUCKET
+    /* Adding this because CreateTodoRequest has an optional Key */
+    const myItem = {
+        userId,
+        todoId,
         createdAt: new Date().toISOString(),
-        name:  createTodoRequest.name,
-        dueDate: createTodoRequest.dueDate,
         done: false,
-    })
+        attachmentUrl: `https://${bucket}.s3.amazonaws.com/${todoId}`,
+        ...createTodoRequest
+    }
+    return await databaseAccess.createTodo(myItem)
 
 }
 
