@@ -14,6 +14,15 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const userId = getUserId(event)
   const newItem = await createTodo(newTodo, userId)
 
+  if (!newItem.name) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: 'Items must have a name to be added.'
+      })
+    };
+  }
+
   // TODO: Implement creating a new TODO item
   console.log(newTodo)
   return {
