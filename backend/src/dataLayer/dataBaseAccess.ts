@@ -27,7 +27,7 @@ export class DatabaseAccess {
               ':userId': userId
             }
           }
-          console.log("*** Data Layer***")
+          console.log("*** Database Access Layer***")
           console.log(inputs)
           const result = await this.documentClient.query(inputs).promise()
           return result.Items as TodoItem[]
@@ -39,7 +39,8 @@ export class DatabaseAccess {
             TableName: this.myTable,
             Item: todoItem
         }
-        
+        console.log("*** Database Access Layer***")
+        console.log(inputs)
         await this.documentClient.put(inputs).promise()
         return todoItem
     }
@@ -59,6 +60,8 @@ export class DatabaseAccess {
                 todoId: todoId
             }
         }
+        console.log("*** Database Access Layer***")
+        console.log(inputs)
         await this.documentClient.delete(inputs).promise()
         return `Deleted Todo ${todoId}`
     }
