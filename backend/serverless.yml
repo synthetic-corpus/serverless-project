@@ -69,6 +69,12 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
+  TestAPI:
+    handler: src/lambda/http/onlineCheck.handler
+    events:
+      - http:
+          method: get
+          cors: true
 
   GetTodos:
     handler: src/lambda/http/getTodos.handler
