@@ -6,7 +6,8 @@ import { createLogger } from '../../utils/logger'
 import Axios from 'axios'
 import { Jwt } from '../../auth/Jwt'
 import { JwtPayload } from '../../auth/JwtPayload'
-//import { jwkskey } from '../../auth/jwkskey'
+
+
 
 const logger = createLogger('auth')
 
@@ -97,10 +98,12 @@ function getToken(authHeader: string): string {
 
 async function matchToKey(kid: string) {
   // takes the header from the JWT token and matches to the right Key.
+  console.log(`Matching to ${kid}`)
   try{
-    const actualKeys: any = await Axios.get('https://dev-jtg.us.auth0.com/.well-known/jwks.json')
-    const signerKey: any = actualKeys.data.keys(key => {key.kid === kid})[0]
-    const x5cKey: string = signerKey.x5v[0]
+    const actualKeys = await Axios.get('https://dev-jtg.us.auth0.com/.well-known/jwks.json')
+    const signerKey = actualKeys.data.keys.filter(key => {key[kid] === kid})[0] || actualKeys.data.keys[0]
+    console.log(actualKeys.data.keys)
+    const x5cKey: string = signerKey.x5c[0]
     if(!x5cKey){
       throw new Error(`Unable to Match any Keys. x5cKey not extracted.`)
     }
