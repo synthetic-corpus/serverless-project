@@ -15,6 +15,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   if (!update) {
     return {
       statusCode: 404,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({
         error: 'Problem Updating item!'
       })

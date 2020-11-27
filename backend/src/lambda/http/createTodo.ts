@@ -16,6 +16,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   if (!newItem.name) {
     return {
       statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({
         error: 'Items must have a name to be added.'
       })
