@@ -24,3 +24,5 @@ yarn-error.log*
 
 # other things that say "debug"
 /debug.log
+debug*
+debug.log.txt
