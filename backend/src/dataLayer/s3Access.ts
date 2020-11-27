@@ -11,7 +11,7 @@ export class S3Access {
         const request: SignedURLRequest = {
             Bucket: this.bucket,
             Key: todoId,
-            Expires: this.expiration
+            Expires: +this.expiration
         }
         return this.s3.getSignedUrlPromise('putObject',request)
     }
