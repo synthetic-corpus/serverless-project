@@ -4,32 +4,22 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import { updateTodo } from '../../businessLogic/todoLogic'
-import { getUserId } from '../utils'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const todoId = event.pathParameters.todoId
   const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
-  const userId = getUserId(event)
+  console.log(todoId)
+  console.log(updatedTodo)
   // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
-  const update = await updateTodo(updatedTodo, userId, todoId)
-  if (!update) {
-    return {
-      statusCode: 404,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      body: JSON.stringify({
-        error: 'Problem Updating item!'
-      })
-    }
-  }
+  const update = await updateTodo(updatedTodo, todoId)
   return {
-    statusCode: 200,
+    statusCode: 201,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
-    body: ""
+    body: JSON.stringify({
+      update
+    })
   }
 }

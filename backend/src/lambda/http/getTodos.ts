@@ -2,33 +2,14 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { getTodo } from '../../businessLogic/todoLogic'
-import { getUserId } from '../utils'
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // TODO: Get all TODO items for a current user
-  //console.debug("The Headers are...,",event.headers)
-  const userId = getUserId(event)
-  const getTodos = await getTodo(userId)
-  
-  if (!getTodos){
-    return {
-      statusCode: 404,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      body: JSON.stringify({
-        error: 'Could Not Retrieve items!'
-      })
-    }
-
-  }
-
+  console.log(event)
+  const userId = 'nonsense'
+  const getTodos = getTodo(userId)
+  console.log(getTodos)
   return {
-    statusCode: 200, 
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
-    },
-    body: JSON.stringify({items: getTodos})
+    statusCode: 203, 
+    body: JSON.stringify({getTodos})
   }
 }
