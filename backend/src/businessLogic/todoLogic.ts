@@ -53,9 +53,10 @@ export async function createTodo(
 /* Update Todo */
 export async function updateTodo(
     updateTodoRequest: UpdateTodoRequest,
+    userId: string,
     todoId: string
 ): Promise<TodoUpdate> {
-    return await databaseAccess.updateTodo(updateTodoRequest, todoId)
+    return await databaseAccess.updateTodo(updateTodoRequest, userId, todoId)
 
 }
 

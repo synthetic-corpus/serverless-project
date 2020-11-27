@@ -7,8 +7,6 @@ import { TodoUpdate } from '../models/TodoUpdate'
 
 
 export class DatabaseAccess {
-
-    /* Not access Database yet. No constructor needed. */
     
     constructor(
         private documentClient = new DocumentClient(),
@@ -27,7 +25,7 @@ export class DatabaseAccess {
               ':userId': userId
             }
           }
-          console.log("*** Database Access Layer***")
+          console.log("*** Database Access Layer ***")
           console.log(inputs)
           const result = await this.documentClient.query(inputs).promise()
           return result.Items as TodoItem[]
@@ -39,16 +37,37 @@ export class DatabaseAccess {
             TableName: this.myTable,
             Item: todoItem
         }
-        console.log("*** Database Access Layer***")
+        console.log("*** Database Access Layer ***")
         console.log(inputs)
         await this.documentClient.put(inputs).promise()
         return todoItem
     }
 
-    updateTodo(todoUpdate: TodoUpdate, todoId: string): TodoUpdate {
-        if(todoId){
-            return todoUpdate
+    async updateTodo(todoUpdate: TodoUpdate, userId: string, todoId: string): Promise<TodoUpdate> {
+        
+        const inputs = {
+            TableName: this.myTable,
+            Key: {
+                userId: userId,
+                todoId: todoId
+            },
+            UpdateExpression: `set #name = :n, #dueDate = :due. #done = :d`, // Update 'instructions' similiar to writing a raw SQL request
+            // Provide the variables for the instructions above.
+            ExpressionAttributeValues: {
+                ':n': todoUpdate.name,
+                ':due': todoUpdate.dueDate,
+                ':d': todoUpdate.done
+            },
+            ExpressionAttributeNames: {
+                '#name': 'name',
+                '#dueDate': 'dueDate',
+                '#done': 'done'
+            }
         }
+        console.log("*** Database Access Layer ***")
+        console.log(inputs)
+        await this.documentClient.update(inputs).promise()
+        return todoUpdate
     }
 
     async deleteTodo(userId: string, todoId: string){
@@ -60,7 +79,7 @@ export class DatabaseAccess {
                 todoId: todoId
             }
         }
-        console.log("*** Database Access Layer***")
+        console.log("*** Database Access Layer ***")
         console.log(inputs)
         await this.documentClient.delete(inputs).promise()
         return `Deleted Todo ${todoId}`
