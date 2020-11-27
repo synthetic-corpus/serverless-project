@@ -1,15 +1,16 @@
 // import * as AWS  from 'aws-sdk'
-// import * as AWSXRay from 'aws-xray-sdk'
+import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
 
 
+
 export class DatabaseAccess {
     
     constructor(
-        private documentClient = new DocumentClient(),
+        private documentClient = AWSXRay.captureAWSClient(new DocumentClient()),
         private myTable = process.env.TODOS_TABLE,
         private indexName = process.env.INDEX_NAME,
     ) {
