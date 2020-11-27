@@ -13,6 +13,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
-    body: JSON.stringify({uploadURL})
+    body: JSON.stringify({uploadUrl: uploadURL})
   }
 }

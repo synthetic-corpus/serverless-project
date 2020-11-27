@@ -22,7 +22,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       body: JSON.stringify({
         error: 'Problem Updating item!'
       })
-    };
+    }
   }
   return {
     statusCode: 200,

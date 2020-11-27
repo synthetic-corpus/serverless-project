@@ -13,6 +13,15 @@ export class S3Access {
             Key: todoId,
             Expires: +this.expiration
         }
-        return this.s3.getSignedUrlPromise('putObject',request)
+        console.log('*** S3 Access Layer ***')
+        try{
+            const uploadURL = await this.s3.getSignedUrlPromise('putObject',request)
+            console.log(`Retrieved URL. Returing ${uploadURL}`)
+            return uploadURL
+        }catch(e){
+            console.log(`s3 Upload URL Failed. With error ${e}`)
+            return undefined // Will cause an error. That's the idea.
+        }
+
     }
 }

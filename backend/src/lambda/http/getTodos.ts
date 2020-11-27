@@ -9,6 +9,20 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const userId = getUserId(event)
   const getTodos = await getTodo(userId)
   
+  if (!getTodos){
+    return {
+      statusCode: 404,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      body: JSON.stringify({
+        error: 'Could Not Retrieve items!'
+      })
+    }
+
+  }
+
   return {
     statusCode: 200, 
     headers: {
