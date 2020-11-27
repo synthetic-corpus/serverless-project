@@ -51,7 +51,7 @@ export class DatabaseAccess {
                 userId: userId,
                 todoId: todoId
             },
-            UpdateExpression: `set #name = :n, #dueDate = :due. #done = :d`, // Update 'instructions' similiar to writing a raw SQL request
+            UpdateExpression: `set #name = :n, #dueDate = :due, #done = :d`, // Update 'instructions' similiar to writing a raw SQL request
             // Provide the variables for the instructions above.
             ExpressionAttributeValues: {
                 ':n': todoUpdate.name,
