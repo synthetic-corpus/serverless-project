@@ -5,11 +5,13 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import { updateTodo } from '../../businessLogic/todoLogic'
 import { getUserId } from '../utils'
+import { httpLog } from '../utils'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const todoId = event.pathParameters.todoId
   const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
   const userId = getUserId(event)
+  httpLog(event)
   // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
   const update = await updateTodo(updatedTodo, userId, todoId)
   if (!update) {

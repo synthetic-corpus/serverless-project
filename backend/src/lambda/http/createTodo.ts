@@ -5,6 +5,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 import { createTodo } from '../../businessLogic/todoLogic'
 import { getUserId } from '../utils'
+import { httpLog } from '../utils'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const newTodo: CreateTodoRequest = JSON.parse(event.body)
@@ -12,7 +13,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   /* Implment Authorization here when ready */
   const userId = getUserId(event)
   const newItem = await createTodo(newTodo, userId)
-
+  httpLog(event)
+  
   if (!newItem.name) {
     return {
       statusCode: 400,

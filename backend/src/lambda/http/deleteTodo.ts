@@ -3,11 +3,13 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { deleteTodo } from '../../businessLogic/todoLogic'
 import { getUserId } from '../utils'
+import { httpLog } from '../utils' 
+
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const todoId = event.pathParameters.todoId
   const userId = getUserId(event)
   const todoDeleted = await deleteTodo(userId,todoId)
-
+  httpLog(event)
   if(!todoDeleted){
     return {
       statusCode: 404,
