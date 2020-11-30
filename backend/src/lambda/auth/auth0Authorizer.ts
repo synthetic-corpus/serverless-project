@@ -14,14 +14,7 @@ const logger = createLogger('auth')
 // TODO: Provide a URL that can be used to download a certificate that can be used
 // to verify JWT token signature.
 // To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
-/*const jwksUrl: any = Axios.get(
-  'https://dev-jtg.us.auth0.com/.well-known/jwks.json',{
-    headers: {
-      'Content-Type': 'application/json',
-      "Access-Control-Allow-Origin": "*",
-      'Access-Control-Allow-Credentials': true,
-    }
-  }) */
+
 
 
 export const handler = async (
@@ -98,24 +91,23 @@ function getToken(authHeader: string): string {
 
 async function matchToKey(kid: string) {
   // takes the header from the JWT token and matches to the right Key.
-  console.log(`Matching to ${kid}`)
+  logger.info(`Matching to ${kid}`)
   try{
     const actualKeys = await Axios.get('https://dev-jtg.us.auth0.com/.well-known/jwks.json')
     const signerKey = actualKeys.data.keys.filter(key => {key[kid] === kid})[0] || actualKeys.data.keys[0]
-    console.log(actualKeys.data.keys)
-    console.log(`Singer Key found was ${signerKey}`)
+    logger.info(actualKeys.data.keys)
+    logger.info(`Singer Key found was ${signerKey}`)
     const x5cKey: string = signerKey.x5c[0]
     if(!x5cKey){
-      console.log(`Could Not Match Keys!!`)
+      logger.info(`Could Not Match Keys!!`)
       throw new Error(`Unable to Match any Keys. x5cKey not extracted.`)
     }
 
     return x5cKey
   }catch(e){
-    console.log(`Could not authenticate. ${e}`)
+    logger.info(`Could not authenticate. ${JSON.stringify(e)}`)
   }
   
-  // console.log(actualKeys.data.keys)
 }
 
 function stringToPEM(cert: string) {

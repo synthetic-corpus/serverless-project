@@ -3,14 +3,17 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { getTodo } from '../../businessLogic/todoLogic'
 import { getUserId } from '../utils'
-import { httpLog } from '../utils'
+import { createLogger } from '../../utils/logger'
+
+const logger = createLogger("Get Todo")
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // TODO: Get all TODO items for a current user
   //console.debug("The Headers are...,",event.headers)
   const userId = getUserId(event)
   const getTodos = await getTodo(userId)
-  httpLog(event)
+  logger.info(`HTTP Layer`)
+  logger.info(`Processing event ${JSON.stringify(event)}`)
   if (!getTodos){
     return {
       statusCode: 404,

@@ -3,7 +3,9 @@ import * as AWSXRay from 'aws-xray-sdk'
 
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
+import { createLogger } from '../utils/logger'
 
+const logger = createLogger('Database Layer')
 const xray = AWSXRay.captureAWS(AWS)
 
 export class DatabaseAccess {
@@ -25,8 +27,8 @@ export class DatabaseAccess {
               ':userId': userId
             }
           }
-          console.log("*** Database Access Layer ***")
-          console.log(inputs)
+          logger.info("*** Database Access Layer ***")
+          logger.info(inputs)
           const result = await this.documentClient.query(inputs).promise()
           return result.Items as TodoItem[]
           
@@ -37,8 +39,8 @@ export class DatabaseAccess {
             TableName: this.myTable,
             Item: todoItem
         }
-        console.log("*** Database Access Layer ***")
-        console.log(inputs)
+        logger.info("*** Database Access Layer ***")
+        logger.info(inputs)
         await this.documentClient.put(inputs).promise()
         return todoItem
     }
@@ -64,8 +66,8 @@ export class DatabaseAccess {
                 '#done': 'done'
             }
         }
-        console.log("*** Database Access Layer ***")
-        console.log(inputs)
+        logger.info("*** Database Access Layer ***")
+        logger.info(inputs)
         await this.documentClient.update(inputs).promise()
         return todoUpdate
     }
@@ -79,8 +81,8 @@ export class DatabaseAccess {
                 todoId: todoId
             }
         }
-        console.log("*** Database Access Layer ***")
-        console.log(inputs)
+        logger.info("*** Database Access Layer ***")
+        logger.info(inputs)
         await this.documentClient.delete(inputs).promise()
         return `Deleted Todo ${todoId}`
     }
